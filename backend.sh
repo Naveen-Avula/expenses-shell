@@ -7,6 +7,10 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+
+echo "please enter the DB password:"
+read -s mysql_root_password
+
 if [ $USERID -ne 0 ]
 then
     echo "Please run this script with root access."
@@ -51,3 +55,24 @@ VALIDATE $? "Extracted backend code"
 
 npm install
 VALIDATE $? "Installing nodejs dependencie"
+
+cp /home/ec2-user/expenses-shell/backend.service etc/systemd/system/backend.service
+VALIDATE $? "Copyied backend service"
+
+systemctl daemon-reload &>>$LOGFILE
+VALIDATE $? "Daemon Reload"
+
+systemctl start backend &>>$LOGFILE
+VALIDATE $? "Starting backend"
+
+systemctl enable backend &>>$LOGFILE
+VALIDATE $? "Enabling backend"
+
+dnf install mysql -y
+VALIDATE $? "Installing MySQL Client"
+
+mysql -h db.naveen.sbs -uroot -p${mysql_root_password} < /app/schema/backend.sql
+VALIDATE $? "Schema loading"
+
+systemctl restart backend &>>$LOGFILE
+VALIDATE $? "Restarting Backend"
