@@ -39,7 +39,7 @@ VALIDATE $? "Starting MySQL Server"
 
 #Below code will be useful for idempotent nature
 # we need to give ip address of the db server
-mysql -h db.naveen.sbs -uroot -p${mysql_root_password} -e 'show databases;' &>>$LOGFILE
+mysql -h db.naveen.sbs -uroot -pExpenseApp@1 -e 'show databases;' &>>$LOGFILE
 if [ $? -ne 0 ]
 then
     mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
