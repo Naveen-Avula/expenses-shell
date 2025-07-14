@@ -18,6 +18,7 @@ then
 else
     echo "You are super user."
 fi
+# Function to validate the command execution
 VALIDATE(){
    if [ $1 -ne 0 ]
    then
@@ -27,6 +28,7 @@ VALIDATE(){
        echo -e "$2... $G SUCCESS $N"
    fi
 }
+
 dnf module disable nodejs -y &>>$LOGFILE
 VALIDATE $? "Disabling default nodejs"
 
