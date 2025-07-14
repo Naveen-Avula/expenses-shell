@@ -34,5 +34,16 @@ VALIDATE $? "Enabling MySQL Server"
 systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "Starting MySQL Server"
 
-mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
-VALIDATE $? "Setting up root password for MySQL"
+# mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
+# VALIDATE $? "Setting up root password"
+
+#Below code will be useful for idempotent nature
+# we need to give ip address of the db server
+mysql -h db.naveen.sbs -uroot -p${mysql_root_password} -e 'show databases;' &>>$LOGFILE
+if [ $? -ne 0 ]
+then
+    mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
+    VALIDATE $? "MySQL Root password Setup"
+else
+ echo "Mysql root pwd is already setup"
+
