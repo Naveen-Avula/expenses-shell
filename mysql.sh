@@ -46,4 +46,5 @@ then
     VALIDATE $? "MySQL Root password Setup"
 else
  echo "Mysql root pwd is already setup"
+ fi
 
